@@ -1,618 +1,502 @@
-# 🏥 Chronic Kidney Disease Prediction System
+# Chronic Kidney Disease (CKD) Prediction System
 
-<!-- Badges and Shields -->
-[![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![Framework](https://img.shields.io/badge/Framework-FastAPI%2BStreamlit-orange)](https://fastapi.tiangolo.com/)
-[![ML](https://img.shields.io/badge/ML-LightGBM%2FRandomForest-red)](https://lightgbm.readthedocs.io/)
-[![Dataset](https://img.shields.io/badge/Dataset-UCI-yellow)](https://archive.ics.uci.edu/dataset/336/chronic+kidney+disease)
-[![Status](https://img.shields.io/badge/Status-Active-brightgreen)](https://github.com/)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit-learn-1.8.0-orange.svg)](https://scikit-learn.org/)
+[![LightGBM](https://img.shields.io/badge/LightGBM-4.5.0-green.svg)](https://lightgbm.readthedocs.io/)
+[![XGBoost](https://img.shields.io/badge/XGBoost-2.8.0-red.svg)](https://xgboost.readthedocs.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
----
-
-A machine learning-powered web application for **early detection and prediction of Chronic Kidney Disease (CKD)** using ensemble learning algorithms. The system analyzes 24 clinical features from blood and urine tests to predict whether a patient has CKD or not.
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Accuracy-100%25-success?style=for-the-badge" alt="Model Accuracy">
-  <img src="https://img.shields.io/badge/F1%20Score-0.9797-yellowgreen?style=for-the-badge" alt="F1 Score">
-</p>
+A high-performance machine learning system for predicting Chronic Kidney Disease (CKD) based on clinical and laboratory measurements. The system achieves exceptional performance with multiple ensemble models, with LightGBM delivering perfect accuracy on the test dataset.
 
 ---
 
-## 📑 Table of Contents
+## 📋 Table of Contents
 
-1. [About The Project](#about-the-project)
-2. [Problem Statement](#problem-statement)
-3. [Features](#features)
-4. [Tech Stack](#tech-stack)
-5. [Dataset](#dataset)
-6. [Project Structure](#project-structure)
-7. [Methodology](#methodology)
-8. [Model Performance](#model-performance)
-9. [Quick Start](#quick-start)
-10. [Installation](#installation)
-11. [Running the Application](#running-the-application)
-12. [API Documentation](#api-documentation)
-13. [Example Usage](#example-usage)
-14. [Contributing](#contributing)
-15. [License](#license)
-16. [References](#references)
-
----
-
-## 📖 About The Project
-
-**Course:** CSE6505 — Machine Learning  
-**Semester:** BSCS 6th Semester  
-**Institution:** Lahore Garrison University, Lahore, Pakistan
-
-**Reference Paper:**
-> *Machine learning models for chronic kidney disease diagnosis and prediction*
-> Biomedical Signal Processing and Control, 2024
-> DOI: 10.1016/j.bspc.2023.105368
-
-This project implements a complete **end-to-end ML pipeline** for CKD prediction — from raw data preprocessing to a deployable web application. It combines state-of-the-art ensemble learning algorithms with a modern FastAPI backend and Streamlit frontend.
+1. [Overview](#overview)
+2. [Features](#features)
+3. [Dataset](#dataset)
+4. [Model Results](#model-results)
+5. [Project Structure](#project-structure)
+6. [Installation](#installation)
+7. [Usage](#usage)
+   - [Loading the Model](#loading-the-model)
+   - [Making Predictions](#making-predictions)
+   - [Running the Notebooks](#running-the-notebooks)
+8. [Model Details](#model-details)
+   - [Preprocessing Pipeline](#preprocessing-pipeline)
+   - [Hyperparameters](#hyperparameters)
+   - [Evaluation Methodology](#evaluation-methodology)
+9. [Reports & Visualizations](#reports--visualizations)
+10. [Technical Notes](#technical-notes)
+11. [License](#license)
+12. [Authors](#authors)
+13. [Acknowledgments](#acknowledgments)
 
 ---
 
-## 🎯 Problem Statement
+## 🔍 Overview
 
-**Chronic Kidney Disease (CKD)** is a progressive condition affecting approximately **10% of the global population**. Often called a "silent disease" because symptoms do not appear until the disease has significantly advanced, CKD presents major healthcare challenges:
+Chronic Kidney Disease (CKD) is a global health concern affecting millions of people worldwide. Early detection and diagnosis are critical for effective treatment and management of the disease. This project implements a complete machine learning pipeline for CKD prediction using clinical and laboratory data.
 
-| Challenge | Impact |
-|-----------|--------|
-| **Late Detection** | Most patients are diagnosed only in advanced stages |
-| **High Treatment Cost** | Dialysis and kidney transplants are extremely expensive |
-| **Resource Scarcity** | Shortage of specialized nephrologists in developing countries |
+The system includes:
+- **Comprehensive data preprocessing** with categorical encoding and KNN imputation
+- **Seven ensemble machine learning models** for comparison
+- **Stratified cross-validation** to ensure robust model evaluation
+- **Detailed model evaluation** with multiple metrics
+- **Deployment-ready** saved model artifacts
 
-### 🎓 Solution
+### Key Highlights
 
-Machine learning models can analyze routine blood and urine test results to detect CKD in early stages — enabling **timely treatment** and **better patient outcomes**.
-
----
-
-## ✨ Features
-
-- **24 Clinical Features Analysis** — Comprehensive analysis of blood and urine test parameters
-- **Ensemble Learning** — Multiple ML algorithms (Random Forest, Gradient Boosting, XGBoost, LightGBM)
-- **Automated Preprocessing** — Built-in data cleaning, imputation, and encoding
-- **REST API** — FastAPI backend for programmatic access
-- **Web Interface** — User-friendly Streamlit UI for predictions
-- **Cross-Validation** — Robust model evaluation using StratifiedKFold
-- **No Data Leakage** — KNNImputer inside Pipeline ensures proper imputation
-- **High Accuracy** — 100% test accuracy with 0.9797 CV F1-score
+- ✅ **2,500 patient records** with 24 clinical features
+- ✅ **7 different ML models** compared
+- ✅ **100% accuracy** achieved with LightGBM
+- ✅ **5-fold cross-validation** for robust evaluation
+- ✅ **Pipeline-based preprocessing** to prevent data leakage
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Features
 
-### Core Technologies
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Python** | 3.11+ | Core programming language |
-| **pandas** | 2.x | Data manipulation and analysis |
-| **numpy** | 1.x | Numerical computing |
-| **scikit-learn** | 1.x | Machine learning algorithms |
-
-### Visualization
-
-| Technology | Purpose |
-|------------|---------|
-| **matplotlib** | Static plotting and charts |
-| **seaborn** | Statistical graphics |
-
-### Machine Learning
-
-| Technology | Purpose |
-|------------|---------|
-| **scikit-learn** | Random Forest, Gradient Boosting, Voting, Stacking |
-| **XGBoost** | Extreme Gradient Boosting |
-| **LightGBM** | Light Gradient Boosting Machine |
-
-### Web Framework
-
-| Technology | Purpose |
-|------------|---------|
-| **FastAPI** | REST API backend |
-| **Uvicorn** | ASGI server |
-| **Streamlit** | Web UI frontend |
-| **joblib** | Model serialization |
+- **Multiple Model Support**: Compare 7 different ensemble algorithms
+- **Automated Preprocessing**: Built-in categorical encoding and missing value imputation
+- **Cross-Validation**: Stratified K-Fold for reliable performance estimates
+- **Model Persistence**: Save and load models using joblib
+- **Visualization Reports**: Generate comprehensive performance charts
+- **Production Ready**: Pipeline encapsulation for seamless deployment
 
 ---
 
 ## 📊 Dataset
 
-| Property | Value |
-|----------|-------|
-| **Source** | UCI Machine Learning Repository |
-| **Link** | [chronic+kidney+disease](https://archive.ics.uci.edu/dataset/336/chronic+kidney+disease) |
-| **Instances** | 400 patients |
-| **Features** | 24 clinical features + 1 target |
-| **Classes** | CKD (250) and NOTCKD (150) |
-| **Missing Values** | Present in multiple columns |
+The project uses the Chronic Kidney Disease dataset from clinical records. The dataset has been preprocessed to handle missing values and categorical variables.
 
-### 📋 Feature Description
+### Dataset Summary
 
-The dataset includes 24 clinical features from blood and urine tests:
-
-#### Numeric Features
-
-| Feature | Description | Unit | Range |
-|---------|-------------|------|-------|
-| `age` | Patient age | years | 1-90 |
-| `bp` | Blood Pressure | mmHg | 50-180 |
-| `sg` | Specific Gravity | - | 1.005-1.025 |
-| `al` | Albumin | - | 0-5 |
-| `su` | Sugar | - | 0-5 |
-| `bgr` | Blood Glucose Random | mg/dL | 70-490 |
-| `bu` | Blood Urea | mg/dL | 1.5-391 |
-| `sc` | Serum Creatinine | mg/dL | 0.2-18.0 |
-| `sod` | Sodium | mEq/L | 4.5-163 |
-| `pot` | Potassium | mEq/L | 2.5-47.0 |
-| `hemo` | Hemoglobin | g/dL | 3.1-17.8 |
-| `pcv` | Packed Cell Volume | % | 16-54 |
-| `wbcc` | White Blood Cell Count | cells/mm³ | 2100-26000 |
-| `rbcc` | Red Blood Cell Count | millions/mm³ | 2.1-8.0 |
-
-#### Categorical Features
-
-| Feature | Description | Values |
-|---------|-------------|--------|
-| `rbc` | Red Blood Cells | normal, abnormal |
-| `pc` | Pus Cell | normal, abnormal |
-| `pcc` | Pus Cell Clumps | present, notpresent |
-| `ba` | Bacteria | present, notpresent |
-| `htn` | Hypertension | yes, no |
-| `dm` | Diabetes Mellitus | yes, no |
-| `cad` | Coronary Artery Disease | yes, no |
-| `appet` | Appetite | good, poor |
-| `pe` | Pedal Edema | yes, no |
-| `ane` | Anemia | yes, no |
-
-#### Target Variable
-
-| Class | Description | Count |
-|-------|-------------|-------|
-| `ckd` | Chronic Kidney Disease | 250 (62.5%) |
-| `notckd` | No Chronic Kidney Disease | 150 (37.5%) |
-
----
-
-## 📂 Project Structure
-
-```
-CKD-ML/
-├── notebooks/                  # Jupyter notebooks for ML pipeline
-│   ├── data/
-│   │   └── kidney_disease.csv # Raw UCI dataset
-│   ├── ml_v0.ipynb            # Exploratory Data Analysis (EDA)
-│   ├── ml_v1.ipynb            # Preprocessing + GridSearchCV
-│   └── ml_v2.ipynb            # Final model training & evaluation
-│
-├── artifacts/                 # Trained models and outputs
-│   └── final_model.joblib     # Best trained model (LightGBM Pipeline)
-│
-├── app/                       # FastAPI backend
-│   ├── classifier.py          # Model loading and prediction logic
-│   └── main.py                # FastAPI application entry point
-│
-├── report/                    # Analysis reports and visualizations
-│   ├── missing_values.png     # Missing values analysis
-│   ├── class_distribution.png # Class balance visualization
-│   ├── numeric_distributions.png # Feature distributions
-│   ├── correlation_heatmap.png   # Feature correlations
-│   ├── categorical_features.png  # Categorical analysis
-│   ├── confusion_matrix.png   # Model confusion matrix
-│   ├── model_comparison.png   # All models comparison chart
-│   └── model_results.csv      # Detailed metrics table
-│
-├── streamlit_app.py           # Streamlit web interface
-├── main.py                    # Main entry point
-├── pyproject.toml             # Project dependencies
-├── uv.lock                    # Locked dependencies
-├── .gitignore                 # Git ignore rules
-├── .python-version            # Python version specification
-└── README.md                  # This file
-```
-
----
-
-## 🔬 Methodology
-
-### Phase 1: Exploratory Data Analysis (`notebooks/ml_v0.ipynb`)
-
-- Dataset shape, data types, and statistical summary
-- Missing values analysis and visualization
-- Class distribution analysis (imbalance detection)
-- Numeric feature distributions and boxplots
-- Correlation heatmap for feature relationships
-- Categorical feature analysis
-
-### Phase 2: Preprocessing & Model Selection (`notebooks/ml_v1.ipynb`)
-
-#### Data Cleaning Pipeline
-1. **Dropped rows** with missing target variable
-2. **Label encoded** categorical features (0/1 mapping)
-3. **Stratified train/test split** (80/20 ratio)
-
-#### Pipeline Architecture (No Data Leakage)
-
-```
-┌─────────────────────────────────────────┐
-│           Pipeline                      │
-│  ┌─────────────────────────────────┐    │
-│  │  KNNImputer (K=3)              │    │
-│  │  - Fits only on training data   │    │
-│  │  - No data leakage to validation│    │
-│  └─────────────────────────────────┘    │
-│                  ↓                       │
-│  ┌─────────────────────────────────┐    │
-│  │  RandomForestClassifier        │    │
-│  │  - Base estimator              │    │
-│  └─────────────────────────────────┘    │
-└─────────────────────────────────────────┘
-```
-
-#### Hyperparameter Tuning
-- **Method:** GridSearchCV with 5-fold StratifiedKFold
-- **Scoring:** `f1_macro` (handles class imbalance)
-- **Best Parameters Found:**
-
-| Parameter | Value |
+| Attribute | Value |
 |-----------|-------|
-| `n_neighbors` (KNN) | 3 |
-| `n_estimators` (RF) | 100 |
-| `max_depth` | 5 |
-| `min_samples_split` | 2 |
-| `min_samples_leaf` | 1 |
-| `max_features` | sqrt |
+| Total Samples | 2,500 |
+| Features | 24 |
+| Target Classes | 2 (CKD / Not CKD) |
+| Class Distribution | 1,566 CKD (62.6%), 934 Not CKD (37.4%) |
+| Train Set Size | 2,000 samples (80%) |
+| Test Set Size | 500 samples (20%) |
 
-### Phase 3: Final Model Training (`notebooks/ml_v2.ipynb`)
+### Feature Description
 
-Seven ensemble models trained and evaluated:
+The dataset includes 24 clinical features covering various aspects of patient health:
 
-| # | Model | Description |
-|---|-------|-------------|
-| 1 | **Random Forest** | Bagged decision trees with bootstrap sampling |
-| 2 | **Gradient Boosting** | Sequential error-correcting trees |
-| 3 | **AdaBoost** | Adaptive weighted boosting |
-| 4 | **XGBoost** | Optimized gradient boosting with L1+L2 regularization |
-| 5 | **LightGBM** | Leaf-wise gradient boosting (fastest) |
-| 6 | **Voting Classifier** | Soft voting ensemble (RF + GB + XGB) |
-| 7 | **Stacking Classifier** | Meta-learner (Logistic Regression) on base models |
+#### Demographics
+| Feature | Description | Type |
+|---------|-------------|------|
+| `age` | Age of the patient | Numeric |
+
+#### Vital Signs
+| Feature | Description | Type |
+|---------|-------------|------|
+| `bp` | Blood Pressure | Numeric |
+
+#### Urinalysis
+| Feature | Description | Type |
+|---------|-------------|------|
+| `sg` | Specific Gravity | Numeric |
+| `al` | Albumin | Numeric |
+| `su` | Sugar | Numeric |
+| `rbc` | Red Blood Cells | Categorical |
+| `pc` | Pus Cell | Categorical |
+| `pcc` | Pus Cell Clumps | Categorical |
+| `ba` | Bacteria | Categorical |
+
+#### Blood Chemistry
+| Feature | Description | Type |
+|---------|-------------|------|
+| `bgr` | Blood Glucose Random | Numeric |
+| `bu` | Blood Urea | Numeric |
+| `sc` | Serum Creatinine | Numeric |
+| `sod` | Sodium | Numeric |
+| `pot` | Potassium | Numeric |
+
+#### Hematology
+| Feature | Description | Type |
+|---------|-------------|------|
+| `hemo` | Hemoglobin | Numeric |
+| `pcv` | Packed Cell Volume | Numeric |
+| `wbcc` | White Blood Cell Count | Numeric |
+| `rbcc` | Red Blood Cell Count | Numeric |
+
+#### Clinical Conditions
+| Feature | Description | Type |
+|---------|-------------|------|
+| `htn` | Hypertension | Categorical |
+| `dm` | Diabetes Mellitus | Categorical |
+| `cad` | Coronary Artery Disease | Categorical |
+| `appet` | Appetite | Categorical |
+| `pe` | Pedal Edema | Categorical |
+| `ane` | Anemia | Categorical |
 
 ---
 
-## 📈 Model Performance
+## 📈 Model Results
 
-### Comparison Results
+The following table shows the comprehensive comparison of all 7 trained models. Results are sorted by F1 Macro score in descending order.
 
-| Model | Accuracy | Precision | Recall | F1 Macro | ROC-AUC | CV F1 (std) |
-|-------|----------|-----------|--------|---------|---------|-------------|
-| **LightGBM** 🏆 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.9797 (±0.017) |
-| AdaBoost | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.9539 (±0.032) |
-| Random Forest | 0.9875 | 0.9902 | 0.9833 | 0.9866 | 1.0000 | 0.9864 (±0.014) |
-| Stacking | 0.9875 | 0.9902 | 0.9833 | 0.9866 | 1.0000 | 0.9797 (±0.020) |
-| XGBoost | 0.9875 | 0.9902 | 0.9833 | 0.9866 | 1.0000 | 0.9698 (±0.025) |
-| Voting | 0.9750 | 0.9808 | 0.9667 | 0.9730 | 1.0000 | 0.9696 (±0.025) |
-| Gradient Boosting | 0.9750 | 0.9808 | 0.9667 | 0.9730 | 0.9660 | 0.9563 (±0.030) |
+| Model | Accuracy | Precision | Recall | F1 Macro | ROC-AUC | CV F1 Mean | CV F1 Std |
+|-------|----------|-----------|--------|----------|---------|------------|-----------|
+| **LightGBM** 🏆 | **100.00%** | **100.00%** | **100.00%** | **100.00%** | **100.00%** | 99.73% | ±0.17% |
+| XGBoost | 99.80% | 99.73% | 99.84% | 99.79% | 100.00% | 99.68% | ±0.20% |
+| Random Forest | 99.60% | 99.68% | 99.47% | 99.57% | 99.99% | 99.41% | ±0.26% |
+| Voting Classifier | 99.40% | 99.41% | 99.31% | 99.36% | 100.00% | 99.36% | ±0.36% |
+| Stacking Classifier | 99.40% | 99.41% | 99.31% | 99.36% | 100.00% | 99.57% | ±0.27% |
+| Gradient Boosting | 99.20% | 99.15% | 99.15% | 99.15% | 99.99% | 98.82% | ±0.50% |
+| AdaBoost | 98.20% | 97.85% | 98.35% | 98.09% | 99.96% | 98.72% | ±0.20% |
 
 ### 🏆 Best Model: LightGBM
 
-| Metric | Value |
+The **LightGBM** classifier achieved **perfect 100% accuracy** on the held-out test set, making it the best-performing model for this dataset.
+
+#### Performance Metrics
+
+| Metric | Score |
 |--------|-------|
-| **Test Accuracy** | 100% |
-| **CV F1 Score** | 0.9797 |
-| **CV Standard Deviation** | 0.0168 (lowest) |
-| **Inference Time** | Fastest |
+| Accuracy | 100.00% |
+| Precision | 100.00% |
+| Recall | 100.00% |
+| F1 Macro | 100.00% |
+| ROC-AUC | 100.00% |
+| Cross-Validation F1 Mean | 99.73% |
+| Cross-Validation F1 Std | ±0.17% |
 
-### Key Findings
+#### Classification Report
 
-1. **LightGBM** achieved highest CV F1-score with lowest variance (most stable)
-2. **KNNImputer** inside Pipeline eliminated data leakage completely
-3. **StratifiedKFold** preserved class ratios across all 5 folds
-4. **f1_macro** scoring effectively handled class imbalance (62.5% CKD vs 37.5% NOTCKD)
-5. **Strongest Predictors:** Serum Creatinine, Hemoglobin, and Packed Cell Volume
+```
+              precision    recall  f1-score   support
+
+         ckd       1.00      1.00      1.00       313
+       notckd       1.00      1.00      1.00       187
+
+    accuracy                           1.00       500
+   macro avg       1.00      1.00      1.00       500
+weighted avg       1.00      1.00      1.00       500
+```
 
 ---
 
-## ⚡ Quick Start
+## 📁 Project Structure
+
+```
+CKD-ML/
+│
+├── README.md                     # This file
+│
+├── artifacts/
+│   └── final_model.joblib       # Saved LightGBM model (best performer)
+│
+├── notebooks/
+│   ├── data/
+│   │   └── kidney_disease.csv  # Dataset (2,500 samples, 24 features)
+│   │
+│   ├── ml_v0.ipynb              # Initial data exploration & visualization
+│   │   ├── Data loading and cleaning
+│   │   ├── Missing value analysis
+│   │   ├── Class distribution analysis
+│   │   ├── Feature correlation heatmap
+│   │   └── Numeric feature distributions
+│   │
+│   ├── ml_v1.ipynb              # Hyperparameter tuning
+│   │   ├── KNN Imputer optimization
+│   │   ├── Random Forest hyperparameter search
+│   │   ├── GridSearchCV implementation
+│   │   └── Best parameters identification
+│   │
+│   └── ml_v2.ipynb              # Final model training & evaluation
+│       ├── All 7 models training
+│       ├── Cross-validation
+│       ├── Model comparison
+│       ├── Best model selection
+│       └── Model persistence
+│
+├── report/                       # Generated visualizations
+│   ├── categorical_features.png     # Categorical feature analysis
+│   ├── class_distribution.png       # Target class distribution
+│   ├── confusion_matrix.png         # Best model confusion matrix
+│   ├── correlation_heatmap.png      # Feature correlations
+│   ├── feature_importance.png       # Feature importance scores
+│   ├── model_comparison.png         # All models comparison chart
+│   ├── model_results.csv            # Detailed results table
+│   ├── missing_values.png           # Missing values visualization
+│   └── numeric_distributions.png    # Numeric feature distributions
+│
+└── .venv/                        # Virtual environment (Python 3.11+)
+```
+
+---
+
+## 💾 Installation
 
 ### Prerequisites
 
-- Python 3.11 or higher
-- uv package manager (recommended)
+- **Python 3.11** or higher
+- **Windows 10/11**, **macOS**, or **Linux**
 
-### Clone the Repository
+### Quick Start
 
-```bash
-git clone https://github.com/waleed-haider534/CKD-ML.git
-cd CKD-ML
-```
 
-### Install Dependencies
+1. Clone the repository and navigate to the project folder
+   cd CKD-ML
 
-```bash
-# Create virtual environment
-uv venv
+2. Create virtual environment:
+   ```bash
+   uv init 
+   python -m venv .venv
+   ```
+3. Activate the environment:
+   - Windows: `.venv\Scripts\activate`
+   - macOS/Linux: `source .venv/bin/activate`
+4. Install dependencies:
+   ```bash
+   pip install pandas numpy scikit-learn xgboost lightgbm matplotlib seaborn joblib
+   ```
+5. RUN Frontend and backend 
+   uv run main.py
 
-# Activate (Windows)
-.venv\Scripts\activate
 
-# Activate (Linux/Mac)
-source .venv/bin/activate
+### Required Packages
 
-# Install all dependencies
-uv pip install pandas numpy matplotlib seaborn scikit-learn xgboost lightgbm fastapi uvicorn streamlit joblib requests
-```
-
-### Run the Application
-
-**Terminal 1 — Start FastAPI Backend:**
-```bash
-cd app
-uvicorn main:app --reload --port 8000
-```
-
-**Terminal 2 — Start Streamlit Frontend:**
-```bash
-streamlit run streamlit_app.py
-```
-
-### Access the Application
-
-- 🌐 **Streamlit UI:** http://localhost:8501
-- 📚 **API Documentation:** http://127.0.0.1:8000/docs
+| Package | Version | Purpose |
+|---------|---------|---------|
+| pandas | - | Data manipulation |
+| numpy | - | Numerical computing |
+| scikit-learn | 1.8.0 | Machine learning |
+| xgboost | 2.8.0 | XGBoost classifier |
+| lightgbm | 4.5.0 | LightGBM classifier |
+| matplotlib | - | Visualization |
+| seaborn | - | Statistical graphics |
+| joblib | - | Model persistence |
 
 ---
 
-## 📥 Installation
+## 🎯 Usage
 
-### Option 1: Using uv (Recommended)
+### Loading the Model
 
-```bash
-# Install uv if not installed
-pip install uv
+The trained LightGBM model is saved as `artifacts/final_model.joblib`. You can load it and use it for predictions:
 
-# Create and activate virtual environment
-uv venv
-.venv\Scripts\activate  # Windows
-source .venv/bin/activate  # Linux/Mac
+```python
+import joblib
+import pandas as pd
+import numpy as np
 
-# Install dependencies
-uv pip install -r requirements.txt
+# Load the saved model
+model = joblib.load('artifacts/final_model.joblib')
+
+print("Model loaded successfully!")
+print(f"Model type: {type(model)}")
 ```
 
-### Option 2: Using pip
+### Making Predictions
 
-```bash
-# Create virtual environment
-python -m venv .venv
-.venv\Scripts\activate  # Windows
-source .venv/bin/activate  # Linux/Mac
+Here's how to make predictions for new patient data:
 
-# Install dependencies
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost lightgbm fastapi uvicorn streamlit joblib requests
+```python
+import joblib
+import pandas as pd
+import numpy as np
+
+# Load the model
+model = joblib.load('artifacts/final_model.joblib')
+
+# Prepare new patient data (24 features in correct order)
+new_patient = pd.DataFrame({
+    'age': [55],
+    'bp': [80],
+    'sg': [1.015],
+    'al': [2],
+    'su': [1],
+    'rbc': [0],        # encoded: 0=abnormal, 1=normal
+    'pc': [1],         # encoded: 0=abnormal, 1=normal
+    'pcc': [0],        # encoded: 0=notpresent, 1=present
+    'ba': [0],         # encoded: 0=notpresent, 1=present
+    'bgr': [140],
+    'bu': [25],
+    'sc': [1.2],
+    'sod': [138],
+    'pot': [4.5],
+    'hemo': [12],
+    'pcv': [38],
+    'wbcc': [7000],
+    'rbcc': [4.2],
+    'htn': [1],        # encoded: 0=no, 1=yes
+    'dm': [0],         # encoded: 0=no, 1=yes
+    'cad': [0],        # encoded: 0=no, 1=yes
+    'appet': [1],      # encoded: 0=poor, 1=good
+    'pe': [0],         # encoded: 0=no, 1=yes
+    'ane': [0]         # encoded: 0=no, 1=yes
+})
+
+# Ensure column order matches training data
+new_patient = new_patient[model.named_steps['clf'].feature_names_in_]
+
+# Make prediction
+prediction = model.predict(new_patient)
+probability = model.predict_proba(new_patient)[:, 1]
+
+# Display results
+class_labels = {0: 'CKD (Chronic Kidney Disease)', 1: 'Not CKD (Healthy)'}
+print(f"Patient Prediction: {class_labels[prediction[0]]}")
+print(f"CKD Probability: {probability[0]:.2%}")
+print(f"Healthy Probability: {1 - probability[0]:.2%}")
 ```
-
-### Option 3: Using pyproject.toml
-
-```bash
-# Install with uv (auto-reads pyproject.toml)
-uv sync
-```
-
----
-
-## 🚀 Running the Application
 
 ### Running the Notebooks
 
-```bash
-# Open Jupyter Lab
-jupyter lab notebooks/
+Open and run the Jupyter notebooks in sequential order:
 
-# Or Jupyter Notebook
-jupyter notebook notebooks/
-```
+1. **Data Exploration** (`ml_v0.ipynb`):
+   - Load and clean the dataset
+   - Analyze missing values
+   - Visualize feature distributions
+   - Generate correlation heatmap
 
-**Recommended Order:**
-1. `ml_v0.ipynb` → Run Exploratory Data Analysis
-2. `ml_v1.ipynb` → Run Preprocessing and GridSearch
-3. `ml_v2.ipynb` → Train final models and evaluate
+2. **Hyperparameter Tuning** (`ml_v1.ipynb`):
+   - Optimize KNN imputer parameters
+   - GridSearchCV for Random Forest
+   - Identify best hyperparameters
 
-### Running the Web Application
-
-#### Step 1: Start the Backend API
-
-```bash
-# Navigate to app directory
-cd app
-
-# Start FastAPI server
-uvicorn main:app --reload --port 8000
-```
-
-Expected output:
-```
-INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Application startup complete
-```
-
-#### Step 2: Start the Frontend
+3. **Final Model Training** (`ml_v2.ipynb`):
+   - Train all 7 ensemble models
+   - Perform 5-fold cross-validation
+   - Compare model performances
+   - Save the best model
 
 ```bash
-# From project root
-streamlit run streamlit_app.py
-```
+# Start Jupyter Notebook
+jupyter notebook
 
-Expected output:
-```
-  You can now view your Streamlit app in your browser.
-  Local URL: http://localhost:8501
-```
-
-### Running with Docker (Optional)
-
-```bash
-# Build the image
-docker build -t ckd-ml .
-
-# Run the container
-docker run -p 8000:8000 -p 8501:8501 ckd-ml
+# Or open a specific notebook
+jupyter notebook notebooks/ml_v2.ipynb
 ```
 
 ---
 
-## 📚 API Documentation
+## ⚙️ Model Details
 
-Once the FastAPI server is running, visit:
-- **Swagger UI:** http://127.0.0.1:8000/docs
-- **ReDoc:** http://127.0.0.1:8000/redoc
+### Preprocessing Pipeline
 
-### Endpoints
+The model uses a scikit-learn Pipeline that encapsulates all preprocessing steps, ensuring no data leakage during cross-validation:
 
-#### Health Check
-```
-GET /health
-```
+1. **Categorical Encoding**: Label encoding for 10 categorical features
+   - Features: `rbc`, `pc`, `pcc`, `ba`, `htn`, `dm`, `cad`, `appet`, `pe`, `ane`
+   - Missing values filled with 'missing' category before encoding
 
-Response:
-```json
-{
-  "status": "healthy",
-  "model_loaded": true
-}
-```
+2. **Missing Value Imputation**: KNN Imputer with k=3 neighbors
+   - Uses Euclidean distance for finding nearest neighbors
+   - Applied within the pipeline to prevent data leakage
 
-#### Prediction
-```
-POST /predict
-```
+3. **Feature Standardization**: Feature names converted to strings for compatibility
 
-**Request Body:**
-```json
-{
-  "age": 48,
-  "bp": 80,
-  "sg": 1.020,
-  "al": 1,
-  "su": 0,
-  "bgr": 121,
-  "bu": 36,
-  "sc": 1.2,
-  "sod": 140,
-  "pot": 4.0,
-  "hemo": 15.4,
-  "pcv": 44,
-  "wbcc": 7800,
-  "rbcc": 5.2,
-  "rbc": "normal",
-  "pc": "normal",
-  "pcc": "notpresent",
-  "ba": "notpresent",
-  "htn": "yes",
-  "dm": "yes",
-  "cad": "no",
-  "appet": "good",
-  "pe": "no",
-  "ane": "no"
-}
-```
+### Hyperparameters
 
-**Response:**
-```json
-{
-  "prediction": "ckd",
-  "probability": {
-    "ckd": 0.75,
-    "notckd": 0.25
-  },
-  "confidence": 0.75
-}
-```
-
----
-
-## 💻 Example Usage
-
-### Using Python (requests)
+#### LightGBM (Best Configuration)
 
 ```python
-import requests
-
-# Prepare patient data
-payload = {
-    "age": 48, "bp": 80, "sg": 1.020, "al": 1, "su": 0,
-    "bgr": 121, "bu": 36, "sc": 1.2, "sod": 140, "pot": 4.0,
-    "hemo": 15.4, "pcv": 44, "wbcc": 7800, "rbcc": 5.2,
-    "rbc": "normal", "pc": "normal", "pcc": "notpresent",
-    "ba": "notpresent", "htn": "yes", "dm": "yes",
-    "cad": "no", "appet": "good", "pe": "no", "ane": "no"
+{
+    'clf__n_estimators': 100,
+    'clf__max_depth': 5,
+    'clf__learning_rate': 0.1,
+    'clf__reg_alpha': 0.1,
+    'clf__reg_lambda': 0.1,
+    'imputer__n_neighbors': 3
 }
-
-# Make prediction
-response = requests.post("http://127.0.0.1:8000/predict", json=payload)
-result = response.json()
-
-print(f"Prediction: {result['prediction']}")
-print(f"Confidence: {result['confidence']:.2%}")
 ```
 
-### Using cURL
+#### Other Models Tested
 
-```bash
-curl -X POST "http://127.0.0.1:8000/predict" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "age": 48, "bp": 80, "sg": 1.020, "al": 1, "su": 0,
-    "bgr": 121, "bu": 36, "sc": 1.2, "sod": 140, "pot": 4.0,
-    "hemo": 15.4, "pcv": 44, "wbcc": 7800, "rbcc": 5.2,
-    "rbc": "normal", "pc": "normal", "pcc": "notpresent",
-    "ba": "notpresent", "htn": "yes", "dm": "yes",
-    "cad": "no", "appet": "good", "pe": "no", "ane": "no"
-  }'
-```
+| Model | Key Hyperparameters |
+|-------|---------------------|
+| XGBoost | n_estimators=100, max_depth=5, learning_rate=0.1 |
+| Random Forest | n_estimators=100, max_depth=5, max_features='sqrt' |
+| Gradient Boosting | n_estimators=100, max_depth=5, learning_rate=0.1 |
+| AdaBoost | n_estimators=100, learning_rate=0.1 |
+| Voting Classifier | Soft voting with RF, GB, XGB |
+| Stacking Classifier | Meta-learner: Logistic Regression |
+
+### Evaluation Methodology
+
+- **Train/Test Split**: 80/20 with stratified sampling to maintain class balance
+- **Cross-Validation**: 5-fold Stratified K-Fold
+- **Primary Metric**: F1 Macro (balances precision and recall for both classes)
+- **Validation Strategy**: Held-out test set to confirm cross-validation results
+- **Random State**: 42 for reproducibility
 
 ---
 
-## 🤝 Contributing
+## 📉 Reports & Visualizations
 
-Contributions are welcome! Please follow these steps:
+The project automatically generates comprehensive visualization reports in the `report/` directory:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+| File | Description |
+|------|-------------|
+| `model_comparison.png` | Bar chart comparing all metrics across models |
+| `confusion_matrix.png` | Confusion matrix for the best model (LightGBM) |
+| `correlation_heatmap.png` | Heatmap showing feature correlations |
+| `class_distribution.png` | Pie chart of CKD vs Not CKD distribution |
+| `missing_values.png` | Bar chart showing missing values per feature |
+| `numeric_distributions.png` | Histograms of numeric feature distributions |
+| `categorical_features.png` | Count plots for categorical features |
+| `feature_importance.png` | Feature importance scores from Random Forest |
 
-Please make sure to update tests as appropriate.
+---
+
+## 📝 Technical Notes
+
+### Data Leakage Prevention
+
+- The KNN Imputer is included inside the Pipeline, ensuring it's fitted only on training data during cross-validation
+- Test data is transformed using the imputer fitted during training
+- No data leakage occurs between training and evaluation phases
+
+### Model Performance Considerations
+
+⚠️ **Important**: The 100% accuracy achieved by LightGBM should be interpreted with caution:
+
+1. **Possible Causes**:
+   - The dataset may have highly separable classes
+   - Some features might be strong predictors (potential leakage)
+   - The dataset size (2,500 samples) may be sufficient for the task
+
+2. **Recommendations for Production**:
+   - Validate on external datasets
+   - Perform feature ablation studies
+   - Consider model interpretability (SHAP values)
+   - Implement proper train/validation/test splits
+
+### Reproducibility
+
+All experiments use `random_state=42` for reproducibility:
+- Train/test split
+- Cross-validation folds
+- All ML models
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is licensed under the MIT License.
 
 ---
 
-## 📚 References
+## 👥 Authors
 
-### Dataset
-> Dua, D. & Graff, C. (2019). UCI Machine Learning Repository. University of California, Irvine. http://archive.ics.uci.edu/ml
-
-### Reference Paper
-> Rahman, M.M., Al-Amin, M., & Hossain, J. (2024). Machine learning models for chronic kidney disease diagnosis and prediction. Biomedical Signal Processing and Control, 87, 105368. DOI: 10.1016/j.bspc.2023.105368
-
-### Learning Resources
-- [scikit-learn Documentation](https://scikit-learn.org/)
-- [LightGBM Documentation](https://lightgbm.readthedocs.io/)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [Streamlit Documentation](https://docs.streamlit.io/)
+- **Waleed Haider** - Primary Developer
 
 ---
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/waleed-haider534">Waleed Haider</a>
-</p>
+## 🙏 Acknowledgments
+
+- Dataset source: UCI Machine Learning Repository / Clinical data
+- Built with the following open-source libraries:
+  - [scikit-learn](https://scikit-learn.org/) - Machine learning
+  - [XGBoost](https://xgboost.readthedocs.io/) - Gradient boosting
+  - [LightGBM](https://lightgbm.readthedocs.io/) - Light gradient boosting
+  - [pandas](https://pandas.pydata.org/) - Data manipulation
+  - [matplotlib](https://matplotlib.org/) - Visualization
+  - [seaborn](https://seaborn.pydata.org/) - Statistical graphics
