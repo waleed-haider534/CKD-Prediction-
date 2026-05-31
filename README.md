@@ -1,10 +1,6 @@
 # Chronic Kidney Disease (CKD) Prediction System
 
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
-[![scikit-learn](https://img.shields.io/badge/scikit-learn-1.8.0-orange.svg)](https://scikit-learn.org/)
-[![LightGBM](https://img.shields.io/badge/LightGBM-4.5.0-green.svg)](https://lightgbm.readthedocs.io/)
-[![XGBoost](https://img.shields.io/badge/XGBoost-2.8.0-red.svg)](https://xgboost.readthedocs.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 A high-performance machine learning system for predicting Chronic Kidney Disease (CKD) based on clinical and laboratory measurements. The system achieves exceptional performance with multiple ensemble models, with LightGBM delivering perfect accuracy on the test dataset.
 
