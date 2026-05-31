@@ -33,8 +33,8 @@ CATEGORICAL_MAPPING = {
 
 # Must match order used in model training
 ALL_FEATURES = [
-    "age", "bp", "sg", "al", "su", "bgr", "bu", "sc", "sod", "pot",
-    "hemo", "pcv", "wbcc", "rbcc", "rbc", "pc", "pcc", "ba",
+    "age", "bp", "sg", "al", "su", "rbc", "pc", "pcc", "ba",
+    "bgr", "bu", "sc", "sod", "pot", "hemo", "pcv", "wbcc", "rbcc",
     "htn", "dm", "cad", "appet", "pe", "ane"
 ]
 
